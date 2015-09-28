@@ -43,7 +43,7 @@ print 'Calculating Maximum Correlation Time'
 time = max_corr(reference,F)
 
 # Playing Audio at the maximum correlation moment
-tart = int((time+34))*2 #LR-CHANNEL
+start = int((time+34))*2 #LR-CHANNEL
 length = 30
 CHUNK = 8192
 
