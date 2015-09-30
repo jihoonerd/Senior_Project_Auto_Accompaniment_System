@@ -13,60 +13,82 @@ from rec_audio import record
 from corr import max_corr
 from __future__ import division
 
-print "AUTO ACCOMPANIMENT SYSTEM WRITTEN BY JIHOON KIM"
+print "AUTO ACCOMPANIMENT SYSTEM * WRITTEN BY JIHOON KIM"
 
 # Load Reference Array
-selection = raw_input('Select the song for accompaniment (A/B)')
+set_A = set(['A','a'])
+set_B = set(['B','b'])
 
 while True:
-	if selection = 'A' or 'a':
-		reference = np.load('diff_A.npy')
+	selection = raw_input('Select the song for accompaniment (A/B): ')
+	if selection in set_A:
+		reference == np.load('diff_A.npy')
+		print 'Song A is loaded.'
 		break
-	elif selection = 'B' or 'b':
-		reference = np.load('diff_B.npy')
+	elif selection in set_B:
+		reference == np.load('diff_B.npy')
+		print 'Song B is loaded.'
 		break
 	else:
 		print 'Wrong Input'
 
 
-# Record a audio from a microphone
-print 'START RECORDING'
-record()
+# System will use 'repeat' variable to decide whether the process will continue or not.
+repeat = True
+while repeat == True:
 
-# Create Constant Q Fourier Transform
-print 'Coverting Audio File to Chromagram'
-F = Chromagram('output8.wav', nfft=16384, wfft=8192, nhop=2205)
-print 'Coverting has been completed'
+	# Record a audio from a microphone
+	print 'START RECORDING'
+	record()
 
-# Calculate Auto Correlation
-print 'Calculating Maximum Correlation Time'
-time = max_corr(reference,F)
+	# Create Constant Q Fourier Transform
+	print 'Coverting Audio File to Chromagram'
+	F = Chromagram('sample.wav', nfft=16384, wfft=8192, nhop=2205)
+	print 'Coverting has been completed.'
 
-# Playing Audio at the maximum correlation moment
-start = int((time+34))*2 #LR-CHANNEL
-length = 30
-CHUNK = 8192
+	# Calculate Auto Correlation
+	print 'Calculating Maximum Correlation Time'
+	time = max_corr(reference,F)
 
-tbp = wave.open('Full_B.wav','rb')
-signal = tbp.readframes(-1)
-signal = np.fromstring(signal,'Int16')
-accom = pyaudio.PyAudio()
+	# Playing Audio at the maximum correlation moment
+	start = int((time+34))*2 #LR-CHANNEL
+	length = 30
+	CHUNK = 8192
 
-stream = accom.open(format=pyaudio.paInt16,channels = 2, output_device_index = 5, rate = tbp.getframerate(), output = True, frames_per_buffer = CHUNK)
+	tbp = wave.open('Full_B.wav','rb')
+	signal = tbp.readframes(-1)
+	signal = np.fromstring(signal,'Int16')
+	accom = pyaudio.PyAudio()
 
-pos = tbp.getframerate()*length
-signal = signal[(start)*tbp.getframerate():(int(start)*tbp.getframerate())+pos]
-sig = signal[1:CHUNK]
+	stream = accom.open(format=pyaudio.paInt16,channels = 2, output_device_index = 5, rate = tbp.getframerate(), output = True, frames_per_buffer = CHUNK)
 
-inc = 0
-data = 0
+	pos = tbp.getframerate()*length
+	signal = signal[(start)*tbp.getframerate():(int(start)*tbp.getframerate())+pos]
+	sig = signal[1:CHUNK]
 
-while data != '':
-    data = struct.pack("%dh"%(len(sig)), *list(sig))
-    stream.write(data)
-    inc=inc+CHUNK
-    sig=signal[inc:inc+CHUNK]
+	inc = 0
+	data = 0
+
+	while data != '':
+	    data = struct.pack("%dh"%(len(sig)), *list(sig))
+	    stream.write(data)
+	    inc=inc+CHUNK
+	    sig=signal[inc:inc+CHUNK]
 
 
-stream.close()
-accom.terminate()
+	stream.close()
+	accom.terminate()
+
+	ask_repeat = raw_input('Do you want to proceed one more time? (y/n): ')
+	yes = set(['Y','y'])
+	no = set(['N','n'])
+
+	while True:
+		if ask_repeat in yes:
+			repeat == True
+			break
+		elif ask_repeat in no:
+			repeat == False
+			break
+		else:
+			print 'Wrong Input'
