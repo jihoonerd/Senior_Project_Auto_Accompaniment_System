@@ -15,6 +15,9 @@ from __future__ import division
 
 print "AUTO ACCOMPANIMENT SYSTEM * WRITTEN BY JIHOON KIM"
 
+print "DEMO SONG A: Cries and Whispers"
+print "DEMO SONG B: B ROSSETTE"
+
 # Load Reference Array
 set_A = set(['A','a'])
 set_B = set(['B','b'])
@@ -22,11 +25,13 @@ set_B = set(['B','b'])
 while True:
 	selection = raw_input('Select the song for accompaniment (A/B): ')
 	if selection in set_A:
-		reference == np.load('diff_A.npy')
+		reference = np.load('diff_A.npy')
+		ref_file = 'Full_A.wav'
 		print 'Song A is loaded.'
 		break
 	elif selection in set_B:
-		reference == np.load('diff_B.npy')
+		reference = np.load('diff_B.npy')
+		ref_file = 'Full_B.wav'
 		print 'Song B is loaded.'
 		break
 	else:
@@ -51,11 +56,13 @@ while repeat == True:
 	time = max_corr(reference,F)
 
 	# Playing Audio at the maximum correlation moment
-	start = int((time+34))*2 #LR-CHANNEL
+	"""This part should be compensated according to calculation time of device."""
+	time_compensation = 34
+	start = int((time+time_compensation))*2 #LR-CHANNEL
 	length = 30
 	CHUNK = 8192
 
-	tbp = wave.open('Full_B.wav','rb')
+	tbp = wave.open(ref_file,'rb')
 	signal = tbp.readframes(-1)
 	signal = np.fromstring(signal,'Int16')
 	accom = pyaudio.PyAudio()
@@ -92,3 +99,5 @@ while repeat == True:
 			break
 		else:
 			print 'Wrong Input'
+
+print 'Done'
