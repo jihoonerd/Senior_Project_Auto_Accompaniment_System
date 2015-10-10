@@ -1,4 +1,6 @@
 # Load Modules
+from __future__ import division
+
 from bregman.suite import *
 import os
 import os.path
@@ -11,7 +13,6 @@ import struct
 from pylab import *
 from rec_audio import record
 from corr import max_corr
-from __future__ import division
 
 print "AUTO ACCOMPANIMENT SYSTEM * WRITTEN BY JIHOON KIM"
 
@@ -57,20 +58,20 @@ while repeat == True:
 
 	# Playing Audio at the maximum correlation moment
 	"""This part should be compensated according to calculation time of device."""
-	time_compensation = 34
-	start = int((time+time_compensation))*2 #LR-CHANNEL
+	time_compensation = 28
+	start = int((time))*2 + time_compensation #LR-CHANNEL
 	length = 30
-	CHUNK = 8192
+	CHUNK = 4096
 
 	tbp = wave.open(ref_file,'rb')
 	signal = tbp.readframes(-1)
 	signal = np.fromstring(signal,'Int16')
 	accom = pyaudio.PyAudio()
 
-	stream = accom.open(format=pyaudio.paInt16,channels = 2, output_device_index = 5, rate = tbp.getframerate(), output = True, frames_per_buffer = CHUNK)
+	stream = accom.open(format=pyaudio.paInt16, channels = 2, output_device_index = 5, rate = tbp.getframerate(), output = True, frames_per_buffer = CHUNK)
 
 	pos = tbp.getframerate()*length
-	signal = signal[(start)*tbp.getframerate():(int(start)*tbp.getframerate())+pos]
+	signal = signal[start*tbp.getframerate():(start*tbp.getframerate())+pos]
 	sig = signal[1:CHUNK]
 
 	inc = 0
@@ -92,10 +93,10 @@ while repeat == True:
 
 	while True:
 		if ask_repeat in yes:
-			repeat == True
+			repeat = True
 			break
 		elif ask_repeat in no:
-			repeat == False
+			repeat = False
 			break
 		else:
 			print 'Wrong Input'
