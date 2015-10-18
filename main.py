@@ -27,12 +27,12 @@ while True:
 	selection = raw_input('Select the song for accompaniment (A/B): ')
 	if selection in set_A:
 		reference = np.load('diff_A.npy')
-		ref_file = 'Full_A.wav'
+		ref_file = 'Acco_A.wav'
 		print 'Song A is loaded.'
 		break
 	elif selection in set_B:
 		reference = np.load('diff_B.npy')
-		ref_file = 'Full_B.wav'
+		ref_file = 'Acco_B.wav'
 		print 'Song B is loaded.'
 		break
 	else:
