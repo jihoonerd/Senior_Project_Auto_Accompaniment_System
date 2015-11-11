@@ -38,7 +38,8 @@ while True:
 	else:
 		print 'Wrong Input'
 
-
+time_adjustment = raw_input('Enter the adjustment of the time from matching time: ')
+time_adjustment = int(time_adjustment)
 # System will use 'repeat' variable to decide whether the process will continue or not.
 repeat = True
 while repeat == True:
@@ -59,8 +60,8 @@ while repeat == True:
 	# Playing Audio at the maximum correlation moment
 	"""This part should be compensated according to calculation time of device."""
 	time_compensation = 28
-	start = int((time))*2 + time_compensation #LR-CHANNEL
-	length = 30
+	start = int((time+time_adjustment))*2 + time_compensation #LR-CHANNEL
+	length = 40
 	CHUNK = 4096
 
 	tbp = wave.open(ref_file,'rb')
