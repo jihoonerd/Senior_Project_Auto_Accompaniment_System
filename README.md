@@ -1,4 +1,4 @@
-# Senior_Project-Auto_Accompaniment_System
+# Senior Project - Auto Accompaniment System
 ## This accompaniment system is designed to work on Raspberry Pi with [PyAudio](https://people.csail.mit.edu/hubert/pyaudio/ "PyAudio Webpage").
 ### main.py
 The main.py controls the overall accompaniment system. Most of modules will be loaded by main.py
