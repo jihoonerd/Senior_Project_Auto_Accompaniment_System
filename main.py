@@ -61,7 +61,7 @@ while repeat == True:
 	"""This part should be compensated according to calculation time of device."""
 	time_compensation = 28
 	start = int((time+time_adjustment))*2 + time_compensation #LR-CHANNEL
-	length = 40
+	length = 30
 	CHUNK = 4096
 
 	tbp = wave.open(ref_file,'rb')
